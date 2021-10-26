@@ -7,10 +7,10 @@ async function sendMail(req, res) {
     let { to, from, username, message } = req.body;
 
     const transporter = nodemailer.createTransport({
-        host: "smtp.gmail.com",
+        host: "smtp.hotmail.com",
         port: 587,
         secure: false,
-        service: 'gmail',
+        service: 'hotmail',
         auth: {
             user: MAIL_USER,
             pass: MAIL_PWD
