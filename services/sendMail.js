@@ -7,9 +7,6 @@ async function sendMail(req, res) {
     let { to, from, username, message } = req.body;
 
     const transporter = nodemailer.createTransport({
-        host: "smtp.hotmail.com",
-        port: 587,
-        secure: false,
         service: 'hotmail',
         auth: {
             user: MAIL_USER,
