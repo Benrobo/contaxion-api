@@ -4,10 +4,9 @@ const MAIL_USER = process.env.MAIL_USER;
 const MAIL_PWD = process.env.MAIL_PWD;
 
 async function sendMail(req, res) {
-    let { to, from, username, message } = req.body;
-
+    let { subject, to, from, username, message } = req.body;
     const transporter = nodemailer.createTransport({
-        service: 'hotmail',
+        service: 'gmail',
         auth: {
             user: MAIL_USER,
             pass: MAIL_PWD
@@ -16,29 +15,35 @@ async function sendMail(req, res) {
 
     const mailOptions = {
         from: "Contaxion: " + from,
-        to: to,
-        subject: 'Contact Form Feedback',
+        to,
+        subject,
         html: `
             From: Contact form.
             <!DOCTYPE html>
             <html lang="en">
             <head>
                 <style>
+                @import url('https://fonts.googleapis.com/css2?family=Poppins&family=Source+Sans+Pro&display=swap');
+                    body{
+                        font-family: 'Poppins', sans-serif;
+                    }
                     blockquote{
                         font-size: 15px;
                         padding:10px;
                         border-left: 4px solid #ccc;
+                        box-shadow: 0px 0px 6px #777;
+                        font-family: 'Poppins', sans-serif;
                     }
                 </style>
             </head>
             <body>
-                <h3>New message from : ${username}</h3>
                 <blockquote>
+                    <h3>New message from : ${username}</h3>
                     <p> ${message}</p>
+                
+                    <br />
+                    <span>Best wishes: <b>Contaxion</b></span>
                 </blockquote>
-
-                <p>Best wishes</p>
-                <p><b>Contaxion</b></p>
             </body>
             </html>
         `
