@@ -1,17 +1,18 @@
 const nodemailer = require("nodemailer");
+const smtpTransport = require('nodemailer-smtp-transport');
 
 const MAIL_USER = process.env.MAIL_USER;
 const MAIL_PWD = process.env.MAIL_PWD;
 
 async function sendMail(req, res) {
     let { subject, to, from, username, message } = req.body;
-    const transporter = nodemailer.createTransport({
+    const transporter = nodemailer.createTransport(smtpTransport({
         service: 'gmail',
         auth: {
             user: MAIL_USER,
             pass: MAIL_PWD
         }
-    });
+    }));
 
     const mailOptions = {
         from: "Contaxion: " + from,
