@@ -6,8 +6,8 @@ const nodemailer = require("nodemailer");
 const sendMail = require("../services/sendMail")
 
 /* GET users listing. */
-router.post('/', async (req, res)=> {
-  return await sendMail(req, res)
+router.post('/', (req, res)=> {
+  return sendMail(req, res)
 });
 
 module.exports = router;

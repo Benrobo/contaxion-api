@@ -5,31 +5,29 @@ const smtpTransport = require('nodemailer-smtp-transport');
 const MAIL_USER = process.env.MAIL_USER;
 const MAIL_PWD = process.env.MAIL_PWD;
 
-async function sendMail(req, res) {
+function sendMail(req, res) {
     let { subject, to, from, username, message } = req.body;
 
 
-const client = new SMTPClient({
-	user: 'alumonabenaiah251@gmail.com',
-	password: 'benrobo8',
-	host: 'smtp.gmail.com',
-	ssl: true,
-});
+    const client = new SMTPClient({
+        user: 'alumonabenaiah251@gmail.com',
+        password: 'benrobo8',
+        host: 'smtp.gmail.com',
+        ssl: true,
+    });
 
-// send the message and get a callback with an error or details of the message that was sent
-client.send(
-	{
-		text: message,
-		from,
-		to,
-		cc: 'else <else@your-email.com>',
-		subject,
-	},
-	(err, message) => {
+    // send the message and get a callback with an error or details of the message that was sent
+    const message = {
+        text: message,
+        from,
+        to,
+        cc: 'else <else@your-email.com>',
+        subject,
+    }
+    client.send(message,(err, message) => {
         res.json(err || message)
-		console.log(err || message);
-	}
-);
+        console.log(err || message);
+    });
     // const transporter = nodemailer.createTransport(smtpTransport({
     //     service: 'gmail',
     //     auth: {
