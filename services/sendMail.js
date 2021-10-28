@@ -8,7 +8,7 @@ const MAIL_PWD = process.env.MAIL_PWD;
 function sendMail(req, res) {
     let { subject, to, from, username, message } = req.body;
 
-
+    // console.log(req.body)
     const client = new SMTPClient({
         user: 'alumonabenaiah251@gmail.com',
         password: 'benrobo8',
@@ -16,18 +16,56 @@ function sendMail(req, res) {
         ssl: true,
     });
 
+    let htmlMessage = `
+    From: Contact form.
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins&family=Source+Sans+Pro&display=swap');
+            body{
+                font-family: 'Poppins', sans-serif;
+            }
+            blockquote{
+                font-size: 15px;
+                padding:10px;
+                border-left: 4px solid #ccc;
+                box-shadow: 0px 0px 6px #777;
+                font-family: 'Poppins', sans-serif;
+            }
+        </style>
+    </head>
+    <body>
+        <blockquote>
+            <h3>New message from : ${username}</h3>
+            <p> ${message}</p>
+        
+            <br />
+            <span>Best wishes: <b>Contaxion</b></span>
+        </blockquote>
+    </body>
+    </html>
+`
+    
     // send the message and get a callback with an error or details of the message that was sent
-    const message = {
-        text: message,
-        from,
-        to,
-        cc: 'else <else@your-email.com>',
-        subject,
+    let clientMessage = {
+        from: `Contact Form: <username@${from}>`,
+		to: `${to}`,
+		cc: `else <else${to}>`,
+		subject: `${subject}`,
+        attachment: [
+            { 
+                data:htmlMessage , alternative: true 
+            },
+        ],
     }
-    client.send(message,(err, message) => {
-        res.json(err || message)
-        console.log(err || message);
-    });
+
+    client.send(clientMessage,
+        (err, message) => {
+            console.log(err || message);
+            res.json({message, err})
+        }
+    );
     // const transporter = nodemailer.createTransport(smtpTransport({
     //     service: 'gmail',
     //     auth: {
@@ -40,36 +78,36 @@ function sendMail(req, res) {
     //     from: "Contaxion: " + from,
     //     to,
     //     subject,
-    //     html: `
-    //         From: Contact form.
-    //         <!DOCTYPE html>
-    //         <html lang="en">
-    //         <head>
-    //             <style>
-    //             @import url('https://fonts.googleapis.com/css2?family=Poppins&family=Source+Sans+Pro&display=swap');
-    //                 body{
-    //                     font-family: 'Poppins', sans-serif;
-    //                 }
-    //                 blockquote{
-    //                     font-size: 15px;
-    //                     padding:10px;
-    //                     border-left: 4px solid #ccc;
-    //                     box-shadow: 0px 0px 6px #777;
-    //                     font-family: 'Poppins', sans-serif;
-    //                 }
-    //             </style>
-    //         </head>
-    //         <body>
-    //             <blockquote>
-    //                 <h3>New message from : ${username}</h3>
-    //                 <p> ${message}</p>
+        // html: `
+        //     From: Contact form.
+        //     <!DOCTYPE html>
+        //     <html lang="en">
+        //     <head>
+        //         <style>
+        //         @import url('https://fonts.googleapis.com/css2?family=Poppins&family=Source+Sans+Pro&display=swap');
+        //             body{
+        //                 font-family: 'Poppins', sans-serif;
+        //             }
+        //             blockquote{
+        //                 font-size: 15px;
+        //                 padding:10px;
+        //                 border-left: 4px solid #ccc;
+        //                 box-shadow: 0px 0px 6px #777;
+        //                 font-family: 'Poppins', sans-serif;
+        //             }
+        //         </style>
+        //     </head>
+        //     <body>
+        //         <blockquote>
+        //             <h3>New message from : ${username}</h3>
+        //             <p> ${message}</p>
                 
-    //                 <br />
-    //                 <span>Best wishes: <b>Contaxion</b></span>
-    //             </blockquote>
-    //         </body>
-    //         </html>
-    //     `
+        //             <br />
+        //             <span>Best wishes: <b>Contaxion</b></span>
+        //         </blockquote>
+        //     </body>
+        //     </html>
+        // `
     // };
 
     // try {
